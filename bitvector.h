@@ -1,3 +1,5 @@
+#ifndef BITVECTOR_H
+
 #include <stdlib.h>
 #include <stdint.h>   //for uint32_t meaning fixed size regardless of platform making it portable
 #include <stdio.h>
@@ -20,6 +22,7 @@ bitVector* bitVectorNew(size_t numberOfBits);
 bool bitVectorCheck(bitVector* vector, size_t bitPosition);
 void bitVectorSet(bitVector* vector, size_t bitPosition);
 
-
+#define BITVECTOR_H
+#endif
 
 
