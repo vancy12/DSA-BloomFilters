@@ -18,6 +18,12 @@ typedef struct bloomFilter{
     size_t totalBitsSet;
 }bloomFilter;
 
-
+bloomFilter* bloomFilterNew(size_t numFunctions, size_t size, ...);
+void bloomFilterFree(bloomFilter* filter);
+void bloomFilterSet(bloomFilter* filter, const void* data, size_t length);
+void bloomFilterSetString(bloomFilter* filter, const char* str);
+bool bloomFilterCheck(bloomFilter* filter, const void* data, size_t length);
+bool bloomFilterCheckString(bloomFilter* filter, const char* str);
+bloomFilter *bloomFilterNewDefault(size_t size);
 
 #endif

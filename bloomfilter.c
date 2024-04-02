@@ -26,6 +26,10 @@ bloomFilter* bloomFilterNew(size_t numFunctions, size_t size, ...){
     return filter;
 }
 
+bloomFilter *bloomFilterNewDefault(size_t size) {
+    return bloomFilterNew(size, 2, djb2, sdbm);
+}
+
 void bloomFilterFree(bloomFilter* filter){
     bitVectorFree(filter->vector);
     free(filter->hash_functions);
