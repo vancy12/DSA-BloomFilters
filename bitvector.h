@@ -21,6 +21,7 @@ void handle_out_of_bounds(size_t bitPosition, bitVector* vector);
 bitVector* bitVectorNew(size_t numberOfBits);
 bool bitVectorCheck(bitVector* vector, size_t bitPosition);
 void bitVectorSet(bitVector* vector, size_t bitPosition);
+void bitVectorFree(bitVector* vactor);
 
 #define BITVECTOR_H
 #endif
