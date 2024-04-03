@@ -75,6 +75,12 @@ void bitVectorSet(bitVector* vector, size_t bitPosition){
 
 }
 
+// freeing
+void bitVectorFree(bitVector* vector){
+    free(vector->memory);
+    free(vector);
+}
+
 
 
 
