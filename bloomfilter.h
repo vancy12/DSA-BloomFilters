@@ -3,12 +3,14 @@
 
 #include "bitvector.h"
 #include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
 #include <stdbool.h>
 
 // initializing a pointer to the hash functions
 // takes the size and void pointer to data as arguments and returns a 32bit hash value
 
-typedef int32_t(*hash32_func)(size_t length, const void* data);
+typedef uint32_t(*hash32_func)(const void* data, size_t length);
 
 
 typedef struct bloomFilter{
