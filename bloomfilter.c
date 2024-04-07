@@ -1,4 +1,6 @@
 #include "bloomfilter.h"
+#include "hash_functions.c"
+
 // include hash functions header file
 
 // allocating memory to bloom filter(number of hash functions, how big the bloom filter is, ...)
@@ -18,7 +20,7 @@ bloomFilter* bloomFilterNew(size_t numFunctions, size_t size, ...){
         handle_out_of_memory();
     }
     va_list argp;
-    va_start(argp, numFunctions);
+    va_start(argp, size);
     for (unsigned i = 0; i < numFunctions; i++){
         filter->hash_functions[i] = va_arg(argp, hash32_func);
     }
@@ -27,7 +29,7 @@ bloomFilter* bloomFilterNew(size_t numFunctions, size_t size, ...){
 }
 
 bloomFilter *bloomFilterNewDefault(size_t size) {
-    return bloomFilterNew(2, size, djb2, sdbm);
+    return bloomFilterNew(2, size, &djb2, &sdbm);
 }
 
 void bloomFilterFree(bloomFilter* filter){
@@ -37,9 +39,8 @@ void bloomFilterFree(bloomFilter* filter){
 }
 
 void bloomFilterSet(bloomFilter* filter, const void* data, size_t length){
-
     for(int i = 0; i < filter->numberHashFunctions; i++){
-        uint32_t hashValue = filter->hash_functions[i](length, data);
+        uint32_t hashValue = filter->hash_functions[i](data, length);
         bitVectorSet(filter->vector, hashValue % filter->vector->size);
     }
     filter->totalBitsSet++;
@@ -55,7 +56,7 @@ void bloomFilterSetString(bloomFilter* filter, const char* str){
 
 bool bloomFilterCheck(bloomFilter* filter, const void* data, size_t length){
     for(int i = 0; i < filter->numberHashFunctions; i++){
-        uint32_t hashValue = filter->hash_functions[i](length, data);
+        uint32_t hashValue = filter->hash_functions[i](data, length);
         if(!bitVectorCheck(filter->vector, hashValue % filter->vector->size)){
             return false;
         }
