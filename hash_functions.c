@@ -1,4 +1,5 @@
 #include "bloomfilter.h"
+#include "murmurhash.c"
 
 #define DJB2_INIT 5381
 

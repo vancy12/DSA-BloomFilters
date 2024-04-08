@@ -29,7 +29,7 @@ bloomFilter* bloomFilterNew(size_t numFunctions, size_t size, ...){
 }
 
 bloomFilter *bloomFilterNewDefault(size_t size) {
-    return bloomFilterNew(2, size, &djb2, &sdbm);
+    return bloomFilterNew(2, size, &djb2, &MurmurHash3);
 }
 
 void bloomFilterFree(bloomFilter* filter){
