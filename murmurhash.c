@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <time.h>
+#include <x86intrin.h>
+#include <inttypes.h>
 
 #define ROTL32(x,y)	_rotl(x,y)
 
@@ -10,14 +12,14 @@ uint32_t getblock32 ( const uint32_t * p, int i ){
   return p[i];
 }
 
-uint32_t fmix32 ( uint32_t h ){
-    h ^= h >> 16;
-    h *= 0x85ebca6b;
-    h ^= h >> 13;
-    h *= 0xc2b2ae35;
-    h ^= h >> 16;
-    return h;
-}
+// uint32_t fmix32 ( uint32_t h ){
+//     h ^= h >> 16;
+//     h *= 0x85ebca6b;
+//     h ^= h >> 13;
+//     h *= 0xc2b2ae35;
+//     h ^= h >> 16;
+//     return h;
+//
 
 uint32_t MurmurHash3_x86_32 ( const void * key, int len, uint32_t seed){
     const uint8_t * data = (const uint8_t*)key;
@@ -66,7 +68,7 @@ uint32_t MurmurHash3_x86_32 ( const void * key, int len, uint32_t seed){
 
     h1 ^= len;
 
-    h1 = fmix32(h1);
+    // h1 = fmix32(h1);
 
     return h1;
 } 
@@ -81,9 +83,8 @@ uint32_t generate_seed() {
     return seed;
 }
 
-
-
 uint32_t MurmurHash3 (const void* data, size_t length){
     uint32_t hashval = MurmurHash3_x86_32(data, length, generate_seed());
+    // printf("MurmurHash:%" PRIu32 "\n", hashval);
     return hashval;
 }
