@@ -5,3 +5,6 @@ for local storage implementation: <br /> >> gcc main.c bloomfilter.c bitvector.c
                                 
                                 
 for ip traceback implementation: <br /> >> gcc network.c bloomfilter.c bitvector.c <br /> >> ./main
+
+![Sample attacker path](IP_Traceback.svg)
+
