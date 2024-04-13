@@ -1,4 +1,5 @@
 #ifndef BITVECTOR_H
+#define BITVECTOR_H
 
 #include <stdlib.h>
 #include <stdint.h>   //for uint32_t meaning fixed size regardless of platform making it portable

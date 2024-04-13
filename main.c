@@ -13,7 +13,6 @@ int main(){
     // else set positions
         // bloomFilterSetString
 
-    // int choice;
     bloomFilter *filter = bloomFilterNewDefault(1024);
     int choice;
     char query[100];
@@ -21,14 +20,14 @@ int main(){
 
     do{
 
-        printf("\n1.Search\n2.Exit\n---> ");
+        printf("1.Search\n2.Exit\n---> ");
         scanf("%d", &choice);
         // printf("Check String:%d", bloomFilterCheckString(filter, "Sakshi")); // This is giving 0
         getchar();
 
         switch(choice){
             case 1:
-                printf("\nEnter query---> ");
+                printf("Enter query---> ");
                 fgets(query, sizeof(query), stdin);
                 query[strcspn(query, "\n")] = '\0'; // remove newline character
 
@@ -47,9 +46,8 @@ int main(){
                     fclose(filePointer);
                 }
                 else{
-                    printf("inside else function\n");
                     bloomFilterSetString(filter, query);
-                    printf("%d\n", bloomFilterCheckString(filter, query));
+                    // printf("%d\n", bloomFilterCheckString(filter, query));
                 }
                 break;
 
