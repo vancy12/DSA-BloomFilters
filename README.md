@@ -1,5 +1,5 @@
 # DSA-BloomFilters
-This is Bloom Filters Implementation in C as part of out DSA project.
+This is Bloom Filters Implementation in C as part of our DSA project.
 
 for local storage implementation: <br /> >> gcc main.c bloomfilter.c bitvector.c <br /> >> ./main
                                 
