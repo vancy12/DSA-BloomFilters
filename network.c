@@ -44,14 +44,14 @@ Graph* formGraph(Graph* graph1){
     addEdge(graph1, 0, 1);
     addEdge(graph1, 0, 2);
     addEdge(graph1, 0, 3);
-    addEdge(graph1, 2, 3);
-    addEdge(graph1, 2, 4);
-    addEdge(graph1, 4, 8);
+    //addEdge(graph1, 2, 3);
+    //addEdge(graph1, 2, 4);
+    addEdge(graph1, 4, 7);
     addEdge(graph1, 4, 6);
     addEdge(graph1, 4, 5);
     addEdge(graph1, 5, 6);
     addEdge(graph1, 5, 3);
-    addEdge(graph1, 3, 7);
+    //addEdge(graph1, 3, 7);
     return graph1;
     
 }
@@ -65,36 +65,13 @@ void print_path(int path[]){
     printf("\n");
 }
 
-char* removeEndUntilSubstring(const char* str, const char* substr) {
-    // Find the position of the substring in the original string
-    const char* found = strstr(str, substr);
-    if (found == NULL) {
-        // If the substring is not found, return a copy of the original string
-        return strdup(str);
-    } else {
-        // Calculate the length of the substring and the portion of the string to keep
-        size_t substr_len = strlen(substr);
-        size_t length_to_keep = found - str + substr_len;
-
-        // Allocate memory for the new string
-        char* result = (char*)malloc(length_to_keep + 1); // Add 1 for the null terminator
-        if (result == NULL) {
-            // Handle memory allocation failure
-            return NULL;
-        }
-
-        // Copy the portion of the original string to keep into the new string
-        strncpy(result, str, length_to_keep);
-        result[length_to_keep] = '\0'; // Null-terminate the new string
-
-        return result;
-    }
-}
 
 void dfs(Graph* graph, int vertex, int destination, int path[], int path_index, char digest[]){
     path[path_index]=vertex;
+    char *local_str = strdup(digest);
     char changes[2];
     sprintf(changes, "%d", 14+(vertex*vertex));
+    strcat(local_str, changes);
     strcat(digest, changes);
 
     if (vertex == destination) {
@@ -105,8 +82,6 @@ void dfs(Graph* graph, int vertex, int destination, int path[], int path_index, 
         bloomFilterSetString(graph->adjLists[vertex]->filter, digest);
         //printf("bloomfiltercheckString for %s: %d\n",digest,bloomFilterCheckString(graph->adjLists[vertex]->filter, digest));
         graph->visited[vertex] = 1;
-        // printf("Printing path: \n");
-        // print_path(path);
         strcat(digest, "\0");
         return;
     }
@@ -119,9 +94,9 @@ void dfs(Graph* graph, int vertex, int destination, int path[], int path_index, 
         if (graph->visited[adjVertex] == 0) {
             dfs(graph, adjVertex, destination, path, path_index+1, digest);
             //printf("%d ", vertex);
-            char * currentDigest = removeEndUntilSubstring(digest, changes);
-            bloomFilterSetString(graph->adjLists[vertex]->filter, currentDigest);
-            //printf("bloomfiltercheckString for %s: %d\n", currentDigest, bloomFilterCheckString(graph->adjLists[vertex]->filter, currentDigest));
+            //printf("%d : %s\n",vertex ,local_str);
+            bloomFilterSetString(graph->adjLists[vertex]->filter, local_str);
+            //printf("bloomfiltercheckString for %s: %d\n", local_str, bloomFilterCheckString(graph->adjLists[vertex]->filter, local_str));
             if (graph->visited[destination] == 1)
                 return;
         }
@@ -179,7 +154,7 @@ int main() {
 
     int * path = (int*)malloc(9*sizeof(int));
 
-    dfs(graph, 0, 8, path, 0, attack);
+    dfs(graph, 0, 7, path, 0, attack);
     printf("Printing path: \n");
     print_path(path);
     
@@ -187,7 +162,7 @@ int main() {
     for(int i = 0; i < 9; i++){
         graph->visited[i] = 0;
     }
-    int src = dfsBackTrack(graph, 8, attack, path2, 0, 0);
+    int src = dfsBackTrack(graph, 7, attack, path2, 0, 0);
     printf("Printing path: \n");
     print_path(path2);
     return 0;
