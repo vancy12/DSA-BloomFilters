@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <time.h>
-#include <x86intrin.h>
+//#include <x86intrin.h>
 #include <inttypes.h>
 
 #define ROTL32(x,y)	_rotl(x,y)

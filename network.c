@@ -46,17 +46,17 @@ Graph* formGraph(Graph* graph1){
     addEdge(graph1, 0, 3);
     addEdge(graph1, 2, 3);
     addEdge(graph1, 2, 4);
-    addEdge(graph1, 4, 7);
+    addEdge(graph1, 4, 8);
     addEdge(graph1, 4, 6);
     // addEdge(graph1, 4, 5);
     addEdge(graph1, 5, 6);
     addEdge(graph1, 3, 5);
-    // addEdge(graph1, 3, 7);
+    addEdge(graph1, 3, 7);
     return graph1;
     
 }
 
-void dfs(Graph* graph, int vertex, int destination, char string[]) {
+void dfs(Graph* graph, int vertex, int destination, char string[], int path[], int path_index) {
     if (vertex == destination) {
         // Destination reached, stop further traversal
         printf("%d ", vertex);
@@ -65,26 +65,35 @@ void dfs(Graph* graph, int vertex, int destination, char string[]) {
         graph->visited[vertex] = 1;
         return;
     }
-
-    printf("%d ", vertex);
-    printf("%d %s\n", graph->adjLists[vertex]->num, string);
-    bloomFilterSetString(graph->adjLists[vertex]->filter, string);
-    printf("bloomfiltercheckString: %d\n", bloomFilterCheckString(graph->adjLists[vertex]->filter, string));
-
+    path[path_index]=vertex;
     graph->visited[vertex] = 1;
 
     node* temp = graph->adjLists[vertex];
     while (temp) {
         int adjVertex = temp->num;
         if (graph->visited[adjVertex] == 0) {
-            dfs(graph, adjVertex, destination, string);
-            // If destination is reached in any adjacent vertex, stop further traversal
+            dfs(graph, adjVertex, destination, string, path, vertex);
+            printf("%d ", vertex);
+            //printf("%d %s\n", graph->adjLists[vertex]->num, string);
+            bloomFilterSetString(graph->adjLists[vertex]->filter, string);
+            printf("bloomfiltercheckString: %d\n", bloomFilterCheckString(graph->adjLists[vertex]->filter, string));
             if (graph->visited[destination] == 1)
                 return;
         }
         temp = temp->next;
     }
 }
+
+void print_path(int path[], int src, int dest){
+    int nxt = src;
+    printf("%d ",src);
+    while(path[nxt]!=path[dest]){
+        printf("%d ",path[nxt]);
+        nxt = path[nxt];
+    }
+    printf("%d \n",dest);
+}
+
 void dfsBackTrack(Graph* graph, int vertex, char string[]){
     printf("%d ", vertex);
 
@@ -120,12 +129,16 @@ int main() {
     Graph* graph = createGraph(9);
     graph = formGraph(graph);
 
-    dfs(graph, 0, 7, attack);
+    int * path = (int*)malloc(sizeof(int)*9);
+
+    dfs(graph, 0, 8, attack, path, 0);
     printf("\n");
+    printf("Printing path: \n");
+    print_path(path, 0, 8);
     for(int i = 0; i < 8; i++){
         graph->visited[i] = 0;
     }
-    dfsBackTrack(graph, 7, attack);
+    dfsBackTrack(graph, 8, attack);
    
     return 0;
 }
