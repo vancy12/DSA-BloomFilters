@@ -31,13 +31,13 @@ void addEdge(Graph* graph, int src, int dest) {
     node* newNode = createNode(dest);
     newNode->next = graph->adjLists[src];
     graph->adjLists[src] = newNode;
-    graph->adjLists[src]->filter = bloomFilterNewDefault(1024);
+    graph->adjLists[src]->filter = bloomFilterNewDefault(10912);
 
     // Add edge from dest to src
     newNode = createNode(src);
     newNode->next = graph->adjLists[dest];
     graph->adjLists[dest] = newNode;
-    graph->adjLists[dest]->filter = bloomFilterNewDefault(1024);
+    graph->adjLists[dest]->filter = bloomFilterNewDefault(10912);
 }
 
 Graph* formGraph(Graph* graph1){
@@ -45,7 +45,7 @@ Graph* formGraph(Graph* graph1){
     addEdge(graph1, 0, 2);
     addEdge(graph1, 0, 3);
     //addEdge(graph1, 2, 3);
-    //addEdge(graph1, 2, 4);
+    addEdge(graph1, 2, 4);
     addEdge(graph1, 4, 7);
     addEdge(graph1, 4, 6);
     // addEdge(graph1, 4, 5);
@@ -159,7 +159,7 @@ int main() {
 
         switch(choice){
             case 1:
-                printf("Add edge between: ");
+                printf("Add connection between: ");
                 scanf("%d%d", &num1, &num2);
                 nodeNumber += 1;
                 graph = createGraph(nodeNumber);
@@ -171,16 +171,15 @@ int main() {
                 if(nodeNumber <= 9){
                     graph = createGraph(9);
                     graph = formGraph(graph);
-                    printf("here\n");
                 }
             
-                printf("Enter source, destination:");
+                printf("Enter source, destination for packet sending :");
                 scanf("%d%d", &source, &dest);
                 
                 int * path = (int*)malloc(nodeNumber * sizeof(int));
 
                 dfs(graph, source, dest, path, 0, attack);
-                printf("Printing path: \n");
+                printf("Printing path of packet : \n");
                 print_path(path);
                 
                 int * path2 = (int*)malloc(sizeof(int) * nodeNumber);
@@ -188,7 +187,7 @@ int main() {
                     graph->visited[i] = 0;
                 }
                 int src = dfsBackTrack(graph, dest, attack, path2, 0, 0);
-                printf("Printing path: \n");
+                printf("Printing traceback from destination till source : \n");
                 print_path(path2);
                 break;
 

@@ -13,7 +13,7 @@ int main(){
     // else set positions
         // bloomFilterSetString
 
-    bloomFilter *filter = bloomFilterNewDefault(1024);
+    bloomFilter *filter = bloomFilterNewDefault(10912);
     int choice;
     char query[100];
     FILE *filePointer;
