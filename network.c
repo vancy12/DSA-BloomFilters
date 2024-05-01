@@ -31,13 +31,13 @@ void addEdge(Graph* graph, int src, int dest) {
     node* newNode = createNode(dest);
     newNode->next = graph->adjLists[src];
     graph->adjLists[src] = newNode;
-    graph->adjLists[src]->filter = bloomFilterNewDefault(1024);
+    graph->adjLists[src]->filter = bloomFilterNewDefault(10912);
 
     // Add edge from dest to src
     newNode = createNode(src);
     newNode->next = graph->adjLists[dest];
     graph->adjLists[dest] = newNode;
-    graph->adjLists[dest]->filter = bloomFilterNewDefault(1024);
+    graph->adjLists[dest]->filter = bloomFilterNewDefault(10912);
 }
 
 Graph* formGraph(Graph* graph1){
@@ -45,10 +45,10 @@ Graph* formGraph(Graph* graph1){
     addEdge(graph1, 0, 2);
     addEdge(graph1, 0, 3);
     //addEdge(graph1, 2, 3);
-    //addEdge(graph1, 2, 4);
+    addEdge(graph1, 2, 4);
     addEdge(graph1, 4, 7);
     addEdge(graph1, 4, 6);
-    addEdge(graph1, 4, 5);
+    // addEdge(graph1, 4, 5);
     addEdge(graph1, 5, 6);
     addEdge(graph1, 5, 3);
     //addEdge(graph1, 3, 7);
@@ -145,25 +145,58 @@ int dfsBackTrack(Graph* graph, int vertex, char string[], int path[], int path_i
 
 int main() {
 
+    int choice;
+    int source, dest, num1, num2;
     // attack packet digest
     char attack[100]="";
+    int nodeNumber = 9;
+    Graph* graph;
+
+    do{
+        printf("Choose:\n1.Add edge\n2.Select source and destination node:\n3.Exit\n");
+        scanf("%d", &choice);
+        getchar();
+
+        switch(choice){
+            case 1:
+                printf("Add connection between: ");
+                scanf("%d%d", &num1, &num2);
+                nodeNumber += 1;
+                graph = createGraph(nodeNumber);
+                graph = formGraph(graph);
+                addEdge(graph, num1, num2);
+                break;
+
+            case 2:
+                if(nodeNumber <= 9){
+                    graph = createGraph(9);
+                    graph = formGraph(graph);
+                }
+            
+                printf("Enter source, destination for packet sending :");
+                scanf("%d%d", &source, &dest);
+                
+                int * path = (int*)malloc(nodeNumber * sizeof(int));
+
+                dfs(graph, source, dest, path, 0, attack);
+                printf("Printing path of packet : \n");
+                print_path(path);
+                
+                int * path2 = (int*)malloc(sizeof(int) * nodeNumber);
+                for(int i = 0; i < nodeNumber; i++){
+                    graph->visited[i] = 0;
+                }
+                int src = dfsBackTrack(graph, dest, attack, path2, 0, 0);
+                printf("Printing traceback from destination till source : \n");
+                print_path(path2);
+                break;
+
+            case 3:
+                printf("Exiting...");
+                break;
+        }
+    }while(choice != 3);
+
     //printf("DFS traversal starting from vertex 0:\n");
-
-    Graph* graph = createGraph(9);
-    graph = formGraph(graph);
-
-    int * path = (int*)malloc(9*sizeof(int));
-
-    dfs(graph, 0, 7, path, 0, attack);
-    printf("Printing path: \n");
-    print_path(path);
-    
-    int * path2 = (int*)malloc(sizeof(int)*9);
-    for(int i = 0; i < 9; i++){
-        graph->visited[i] = 0;
-    }
-    int src = dfsBackTrack(graph, 7, attack, path2, 0, 0);
-    printf("Printing path: \n");
-    print_path(path2);
     return 0;
 }
